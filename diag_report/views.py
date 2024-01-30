@@ -30,7 +30,6 @@ def start(request):
     oauth_url = oauth_controller.create_redirect_link(
         request=request,
         scopes=(oauth_controller.create_phone_scope(), oauth_controller.create_approved_addon_scope(token)),
-        callback_view="diag:oauth-callback"
     )
 
     return redirect(oauth_url)

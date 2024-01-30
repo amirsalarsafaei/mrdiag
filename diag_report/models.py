@@ -1,9 +1,11 @@
+import uuid
+
 from django.db import models
 from oauth.models import OAuth
 
 
 class SubmitTicket(models.Model):
-    ticket = models.UUIDField(primary_key=True)
+    ticket = models.UUIDField(primary_key=True, default=uuid.uuid4)
     used = models.BooleanField(default=False)
     oauth = models.ForeignKey(to=OAuth, to_field='id', on_delete=models.CASCADE)
 

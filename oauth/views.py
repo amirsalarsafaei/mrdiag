@@ -29,8 +29,8 @@ def oauth_callback(request):
 
     del (request.session[settings.OAUTH_INFO_SESSION_KEY])
 
-    app_name, state_in_session, scopes, callback_view, oauth_url = oauth_session["app_name"], oauth_session["state"], \
-        oauth_session["scopes"], oauth_session["callback_view"], oauth_session["oauth_url"]
+    state_in_session, scopes, oauth_url =  oauth_session["state"], \
+        oauth_session["scopes"], oauth_session["oauth_url"]
 
     code = request.GET.get("code")
     state = request.GET.get("state")

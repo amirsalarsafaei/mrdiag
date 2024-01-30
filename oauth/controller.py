@@ -32,7 +32,7 @@ def get_oauth(code, *args, **kwargs) -> OAuth:
 
 
 # noinspection PyTypeChecker,PyNoneFunctionAssignment
-def create_redirect_link(request, scopes, callback_view, state_data: str = "") -> str:
+def create_redirect_link(request, scopes, state_data: str = "") -> str:
     salt = ''.join(random.choices(string.ascii_letters, k=STATE_SALT_LEN))
 
     if state_data != "":
@@ -53,7 +53,6 @@ def create_redirect_link(request, scopes, callback_view, state_data: str = "") -
     request.session[settings.OAUTH_INFO_SESSION_KEY] = {
         "state": state,
         "scopes": scopes,
-        "callback_view": callback_view,
         "oauth_url": oauth_url,
     }
 
