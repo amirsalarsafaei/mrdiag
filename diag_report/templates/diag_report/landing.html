@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<h1>کارشناسی آنلاین اندروید</h1>
+<details open>
+    <summary>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            class="caret">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M15.41 16.59L10.83 12L15.41 7.41L14 6L8 12L14 18L15.41 16.59Z" fill="black"
+                fill-opacity="0.32"></path>
+        </svg>
+        <span>کارشناسی آنلاین اندروید چیست؟</span>
+    </summary>
+    <p>
+        وقت نداریم بگیم
+    </p>
+</details>
+<div style=" position: sticky; bottom: 0; margin-top: auto; background: #fff; padding: 16px 0; ">
+    <p>
+        در ادامه نیاز است تا اجازهٔ درج افزونه در صفحهٔ اگهی و دسترسی به شمارهٔ خود را بدهید
+    </p>
+    <a class="button primary" href="/diag/start?token={{ token }}">شروع فرایند</a>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <title>آقای دیاگ</title>
+
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="https://s100.divarcdn.com/static/thewall-assets/favicon-32x32.png">
+
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width,height=device-height,initial-scale=1,interactive-widget=resizes-visual">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="https://unpkg.com/htmx.org@1.5.0"
+        integrity="sha384-oGA+prIp5Vchu6we2YkI51UtVzN9Jpx2Z7PnR1I78PnZlN8LkrCT4lqqqmDkyrvI" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <main style="flex-grow: 1;display: flex;flex-flow: column wrap;flex-direction: column;align-items: center;">
+            <div class="container" id="main" style="display: flex; flex-flow: column wrap; flex-grow: 1; padding-top: 16px; padding-bottom: 16px">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </main>
+    </div>
+    <script>
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
+    </script>
+</body>
+
+</html>
