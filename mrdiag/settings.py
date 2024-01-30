@@ -47,7 +47,7 @@ CSRF_TRUSTED_ORIGINS = [
 if DEBUG:
     HOST = "http://localhost:8000"
 else:
-    HOST = "https://team4.hackathon.divar.codes/"
+    HOST = "https://team4.hackathon.divar.codes"
 
 
 OAUTH_INFO_SESSION_KEY = "oauth"
