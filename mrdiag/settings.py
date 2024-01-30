@@ -30,7 +30,7 @@ ENCRYPTION_KEY = os.environ.get("ENCRYPTION_SECRET", Fernet.generate_key().decod
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = to_bool(os.environ.get("DEBUG", default=True))
-
+print(os.environ.get("DEBUG"))
 APP_SLUG = os.environ.get("APP_SLUG", 'canyon-neon-shift')
 API_KEY = os.environ.get("API_KEY")
 
@@ -116,6 +116,9 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+
+STATIC_ROOT = BASE_DIR / "collected-static"
 
 
 # Password validation
