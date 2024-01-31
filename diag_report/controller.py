@@ -29,7 +29,7 @@ def create_report_addon(report: DiagReport):
                          has_divider=True,
                          icon=Icon()),
                 ScoreRow(title="برند برد", descriptive_score=f"{report.device_board}"),
-                ScoreRow(title="برند پردازنده")
+                ScoreRow(title="برند پردازنده", descriptive_score=f"{report.device_hardware}")
             ]
         )
     )

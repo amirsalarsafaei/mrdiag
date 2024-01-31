@@ -27,7 +27,7 @@ class DiagReportSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super(DiagReportSerializer, self).to_representation(instance)
-        battery_health_enum = BatteryHealth[data['battery_health']]
+        battery_health_enum = BatteryHealth(int(data['battery_health']))
         data['battery_health'] = battery_health_enum.name
         return data
 
