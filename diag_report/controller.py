@@ -7,6 +7,7 @@ from google_images_search import GoogleImagesSearch
 
 from kenar.clients.addons import addons_client
 from kenar.models.addon import Addon
+from kenar.models.icons import IconName
 from kenar.models.widgets import *
 
 gis = GoogleImagesSearch(settings.GOOGLE_KEY, '3171bf9de69d14b64')
@@ -27,9 +28,9 @@ def create_report_addon(report: DiagReport):
                          descriptive_score=f"{report.os_version} {get_android_name(report.os_version)}",
                          score_color=Color.SUCCESS_PRIMARY,
                          has_divider=True,
-                         icon=Icon()),
-                ScoreRow(title="برند برد", descriptive_score=f"{report.device_board}"),
-                ScoreRow(title="برند پردازنده", descriptive_score=f"{report.device_hardware}")
+                         icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
+                ScoreRow(title="برند برد", descriptive_score=f"{report.device_board}", icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
+                ScoreRow(title="برند پردازنده", descriptive_score=f"{report.device_hardware}", icon=Icon(icon_name=IconName.BRAND_GOOGLE))
             ]
         ),
         settings.API_KEY,
