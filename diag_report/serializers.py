@@ -42,7 +42,7 @@ class DiagReportSerializer(serializers.ModelSerializer):
     @staticmethod
     def validate_ticket(value):
         try:
-            value = SubmitTicket.objects.get(ticket=value)
+            SubmitTicket.objects.get(ticket=value)
         except ObjectDoesNotExist:
             raise serializers.ValidationError("This ticket is not valid.")
 
