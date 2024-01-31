@@ -34,7 +34,7 @@ def create_report_addon(report: DiagReport):
                 ScoreRow(title="برند پردازنده", descriptive_score=f"{report.device_hardware}",
                          icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
                 ScoreRow(title="وضعیت باتری", descriptive_score=get_battery_descriptive(report.battery),
-                         score_color=get_battery_color(report.battery), icon=Icon(icon_name=IconName.BATTERY_PROFILE)),
+                         score_color=get_battery_color(report.battery), icon=Icon(icon_name=IconName.BATTERY_HORIZ_075)),
                 ScoreRow(title="مقدار رم", descriptive_score=f"{round(float(report.total_memory) / 1e9)}",
                          icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
                 ScoreRow(title="مدل نامبر", descriptive_score=report.device_model,
