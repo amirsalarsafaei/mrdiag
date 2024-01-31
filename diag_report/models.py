@@ -36,7 +36,7 @@ class DiagReport(models.Model):
     device_board = models.CharField(max_length=512, blank=True, default="")
     device_manufacturer = models.CharField(max_length=512, blank=True, default="")
     device_product = models.CharField(max_length=512, blank=True, default="")
-    os_version = models.IntegerField(max_length=128, default=0)
+    os_version = models.IntegerField( default=0)
 
     image = models.URLField(null=True)
     submitted = models.BooleanField(default=False)
