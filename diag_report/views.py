@@ -30,6 +30,7 @@ def create_report(request, *args, **kwargs):
     serializer.is_valid(raise_exception=True)
     report: DiagReport = serializer.save()
     report.image = get_phone_image(report)
+    report.ticket.used = True
     report.save()
 
     serializer = DiagReportSerializer(report)

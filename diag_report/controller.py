@@ -5,11 +5,34 @@ from django.conf import settings
 from diag_report.models import DiagReport
 from google_images_search import GoogleImagesSearch
 
+from kenar.clients.addons import addons_client
+from kenar.models.addon import Addon
+from kenar.models.widgets import *
+
 gis = GoogleImagesSearch(settings.GOOGLE_KEY, '3171bf9de69d14b64')
 
 
 def create_report_addon(report: DiagReport):
-    pass
+    access_token = report.ticket.oauth.access_token
+    post_token = report.ticket.oauth.approved_addon_token()
+
+    addons_client.create_post_addon(
+        post_token,
+        Addon(
+            widgets=[
+                LegendTitleRow(title="اقای‌آندروید", subtitle="کارشناسی‌آنلاین", has_divider=True),
+                DescriptionRow(text="با کارشناسی‌آنلاین اندروید مشخصات دقیق آگهی را بدست آورید و مطمئن تر خرید کنید",
+                               has_divider=True),
+                ScoreRow(title="ورژن آندروید",
+                         descriptive_score=f"{report.os_version} {get_android_name(report.os_version)}",
+                         score_color=Color.SUCCESS_PRIMARY,
+                         has_divider=True,
+                         icon=Icon()),
+                ScoreRow(title="برند برد", descriptive_score=f"{report.device_board}"),
+                ScoreRow(title="برند پردازنده")
+            ]
+        )
+    )
 
 
 def get_phone_image(report: DiagReport) -> Optional[str]:

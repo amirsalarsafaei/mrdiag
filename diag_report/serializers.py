@@ -4,7 +4,7 @@ from .models import DiagReport, BatteryHealth, SubmitTicket
 
 
 class DiagReportSerializer(serializers.ModelSerializer):
-    ticket = serializers.UUIDField(write_only=True)
+    ticket = serializers.UUIDField(write_only=True, required=True)
 
     class Meta:
         model = DiagReport
@@ -19,7 +19,8 @@ class DiagReportSerializer(serializers.ModelSerializer):
             'device_product',
             'os_version',
             'image',
-            'ticket'
+            'ticket',
+            'device_hardware'
         ]
 
         read_only_fields = ('image',)
