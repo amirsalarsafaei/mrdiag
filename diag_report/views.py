@@ -54,6 +54,7 @@ def submit_report(request, *args, **kwargs):
         logger.error("could not create addon", type(e))
         raise APIException("could not create addon")
 
+    return Response({"deep_link": ""}, status=status.HTTP_200_OK)
 
 def landing(request):
     token = request.GET.get("post_token")
