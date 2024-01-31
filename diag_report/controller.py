@@ -31,7 +31,9 @@ def create_report_addon(report: DiagReport):
                 ScoreRow(title="برند برد", descriptive_score=f"{report.device_board}"),
                 ScoreRow(title="برند پردازنده", descriptive_score=f"{report.device_hardware}")
             ]
-        )
+        ),
+        settings.API_KEY,
+        access_token
     )
 
 
