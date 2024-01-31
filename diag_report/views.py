@@ -1,5 +1,57 @@
+import logging
+
+from django.conf import settings
+from django.db import transaction
 from django.shortcuts import render, redirect
+from rest_framework.decorators import api_view
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.exceptions import APIException
+from kenar.clients.addons import addons_client
+from kenar.models.addon import Addon
+from kenar.models.colors import Color
+from kenar.models.widgets import LegendTitleRow, ScoreRow
+from kenar.utils.errors import DivarException
 from oauth import controller as oauth_controller
+
+from rest_framework import generics, status
+
+from .models import DiagReport
+from .serializers import DiagReportSerializer, SubmitDiagReportSerializer
+from .controller import get_phone_image, create_report_addon
+
+logger = logging.getLogger(__name__)
+
+
+@api_view(['POST'])
+@transaction.atomic
+def create_report(request, *args, **kwargs):
+    serializer = DiagReportSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    report: DiagReport = serializer.save()
+    report.image = get_phone_image(report)
+    report.save()
+
+    serializer = DiagReportSerializer(report)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def submit_report(request, *args, **kwargs):
+    serializer = SubmitDiagReportSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+
+    report = get_object_or_404(DiagReport, ticket=serializer.ticket)
+    try:
+        create_report_addon(report)
+        report.submitted = True
+        report.save()
+    except DivarException as e:
+        logger.error("could not create addon", e.message)
+        raise APIException("could not create addon")
+    except Exception as e:
+        logger.error("could not create addon", type(e))
+        raise APIException("could not create addon")
 
 
 def landing(request):

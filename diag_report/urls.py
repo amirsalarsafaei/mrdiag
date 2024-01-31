@@ -19,7 +19,9 @@ from diag_report.views import *
 urlpatterns = [
     path("start/", start, name="start"),
     path("landing/", landing, name="landing"),
-    path("begin_diag/", begin_diag, name="begin-diag")
+    path("begin_diag/", begin_diag, name="begin-diag"),
+    path("create-report/", create_report, name="create-report"),
+    path("submit-report/", submit_report, name="submit-report")
 ]
 
 app_name = 'diag_report'

@@ -30,9 +30,9 @@ ENCRYPTION_KEY = os.environ.get("ENCRYPTION_SECRET", Fernet.generate_key().decod
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = to_bool(os.environ.get("DEBUG", default=True))
-print(os.environ.get("DEBUG"))
 APP_SLUG = os.environ.get("APP_SLUG", 'canyon-neon-shift')
 API_KEY = os.environ.get("API_KEY")
+GOOGLE_KEY = os.environ.get("GOOGLE_KEY")
 
 ALLOWED_HOSTS = [
     "*"
@@ -61,7 +61,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'oauth',
-    'diag_report'
+    'diag_report',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

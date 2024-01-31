@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Optional
 
+from kenar.models.colors import Color
 from kenar.models.encoder import CustomEncoderModel
 from kenar.models.actions import Action, ActionType
 from kenar.models.icons import Icon
@@ -12,6 +13,7 @@ class WidgetType(Enum):
     SUBTITLE_ROW = 2
     SELECTOR_ROW = 3
     EVENT_ROW = 4
+    SCORE_ROW = 5
 
 
 class Widget(CustomEncoderModel):
@@ -134,3 +136,25 @@ class EventRow(Widget):
         self.icon = icon
         self.image_url = image_url
 
+
+class ScoreRow(Widget):
+    __slots__ = ('widget_type', 'title', 'has_divider', 'percentage_score', 'descriptive_score',
+                 'icon', 'score_color', 'action')
+
+    def __init__(self,
+                 title: Optional[str] = None,
+                 icon: Optional[Icon] = None,
+                 has_divider: Optional[bool] = None,
+                 percentage_score: Optional[int] = None,
+                 descriptive_score: Optional[str] = None,
+                 score_color: Optional[Color] = None,
+                 action: Optional[Action] = None):
+        self.title = title
+        self.has_divider = has_divider
+        self.icon = icon
+        self.action = action
+        self.percentage_score = percentage_score
+        self.descriptive_score = descriptive_score
+        self.score_color = score_color
+
+        super().__init__(WidgetType.SCORE_ROW)

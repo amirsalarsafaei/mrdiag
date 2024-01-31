@@ -29,7 +29,7 @@ def oauth_callback(request):
 
     del (request.session[settings.OAUTH_INFO_SESSION_KEY])
 
-    state_in_session, scopes, oauth_url =  oauth_session["state"], \
+    state_in_session, scopes, oauth_url = oauth_session["state"], \
         oauth_session["scopes"], oauth_session["oauth_url"]
 
     code = request.GET.get("code")

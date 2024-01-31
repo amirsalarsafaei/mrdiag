@@ -1,7 +1,22 @@
 import uuid
+from enum import IntEnum
 
 from django.db import models
 from oauth.models import OAuth
+
+
+class BatteryHealth(IntEnum):
+    GOOD = 1
+    OVERHEAT = 2
+    DEAD = 3
+    OVER_VOLTAGE = 4
+    UNSPECIFIED_FAILURE = 5
+    COLD = 6
+    UNKNOWN = 7
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name) for key in cls]
 
 
 class SubmitTicket(models.Model):
@@ -11,4 +26,17 @@ class SubmitTicket(models.Model):
 
 
 class DiagReport(models.Model):
-    ticket = models.ForeignKey(to=SubmitTicket, to_field='ticket', on_delete=models.CASCADE)
+    ticket = models.OneToOneField(to=SubmitTicket, to_field='ticket', on_delete=models.CASCADE)
+    battery_health = models.CharField(max_length=100, choices=BatteryHealth.choices(),
+                                      default=BatteryHealth.UNKNOWN.name)
+    available_memory = models.BigIntegerField(default=0)
+    total_memory = models.BigIntegerField(default=0)
+    device_model = models.CharField(max_length=512, blank=True, default="")
+    device_brand = models.CharField(max_length=512, blank=True, default="")
+    device_board = models.CharField(max_length=512, blank=True, default="")
+    device_manufacturer = models.CharField(max_length=512, blank=True, default="")
+    device_product = models.CharField(max_length=512, blank=True, default="")
+    os_version = models.CharField(max_length=128, blank=True, default="")
+
+    image = models.URLField(null=True)
+    submitted = models.BooleanField(default=False)

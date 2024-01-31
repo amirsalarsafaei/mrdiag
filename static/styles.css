@@ -1,10 +1,10 @@
 :root {
-    --color-brand: #a62626;
-    --color-brand-secondary: rgb(166, 38, 38, 0.56);
+    --color-brand: #3da626;
+    --color-brand-secondary: rgba(100, 166, 38, 0.56);
     --color-brand-light-100: rgb(166, 38, 38, 0.04);
     --color-brand-divider: rgb(166, 38, 38, 0.12);
-    --color-brand-hover: #be3737;
-    --color-brand-press: #9d1b1b;
+    --color-brand-hover: #3da626;
+    --color-brand-press: rgba(100, 166, 38, 0.56);
     --color-black-primary: rgba(0, 0, 0, 0.87);
     --color-black-secondary: rgba(0, 0, 0, 0.56);
     --color-black-dark-100: rgba(0, 0, 0, 0.48);
