@@ -11,9 +11,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="32x32"
-        href="https://s100.divarcdn.com/static/thewall-assets/favicon-32x32.png">
-
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{%  static 'favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
     <meta charset="utf-8">
     <meta name="viewport"
         content="width=device-width,height=device-height,initial-scale=1,interactive-widget=resizes-visual">
@@ -28,6 +29,14 @@
 
 <body>
     <div id="app">
+
+        <header>
+            <div class="container">
+                <img width="48" height="48" class="nav-bar__logo" alt="لوگوی آقای دیاگ"
+                    src="{% static 'logo.png' %}"
+                    style="display: block;">
+            </div>
+        </header>
         <main style="flex-grow: 1;display: flex;flex-flow: column wrap;flex-direction: column;align-items: center;">
             <div class="container" id="main" style="display: flex; flex-flow: column wrap; flex-grow: 1; padding-top: 16px; padding-bottom: 16px">
                 {% block content %}
