@@ -29,12 +29,16 @@ def create_report_addon(report: DiagReport):
                          score_color=Color.SUCCESS_PRIMARY,
                          has_divider=True,
                          icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
-                ScoreRow(title="برند برد", descriptive_score=f"{report.device_board}", icon=Icon(icon_name=IconName.SETTINGS)),
-                ScoreRow(title="برند پردازنده", descriptive_score=f"{report.device_hardware}", icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
+                ScoreRow(title="برند برد", descriptive_score=f"{report.device_board}",
+                         icon=Icon(icon_name=IconName.SETTINGS)),
+                ScoreRow(title="برند پردازنده", descriptive_score=f"{report.device_hardware}",
+                         icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
                 ScoreRow(title="وضعیت باتری", descriptive_score=get_battery_descriptive(report.battery),
-                         score_color=get_battery_color(report.battery),icon=Icon(icon_name=IconName.BATTERY_PROFILE)),
-                ScoreRow(title="مقدار رم", descriptive_score=f"{round(float(report.total_memory) / 1e9)}", icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
-                ScoreRow(title="مدل نامبر", descriptive_score=report.device_model, icon=Icon(icon_name=IconName.BRAND_GOOGLE))
+                         score_color=get_battery_color(report.battery), icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
+                ScoreRow(title="مقدار رم", descriptive_score=f"{round(float(report.total_memory) / 1e9)}",
+                         icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
+                ScoreRow(title="مدل نامبر", descriptive_score=report.device_model,
+                         icon=Icon(icon_name=IconName.BRAND_GOOGLE))
             ]
         ),
         settings.API_KEY,
@@ -55,12 +59,14 @@ def get_battery_descriptive(battery: BatteryHealth) -> str:
         return "داغ‌‌شدگی"
     return "نامشخص"
 
+
 def get_battery_color(battery: BatteryHealth) -> Color:
     if battery.value == BatteryHealth.GOOD:
         return Color.SUCCESS_PRIMARY
     if battery.value == BatteryHealth.UNKNOWN:
         return Color.TEXT_PRIMARY
     return Color.ERROR_PRIMARY
+
 
 def get_phone_image(report: DiagReport) -> Optional[str]:
     _search_params = {
@@ -109,4 +115,3 @@ def get_android_name(version):
 
     # Return the corresponding name; if not found, return "Unknown"
     return version_names.get(str(version), "Unknown")
-
