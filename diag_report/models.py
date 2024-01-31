@@ -44,4 +44,4 @@ class DiagReport(models.Model):
 
     @property
     def battery(self):
-        return BatteryHealth(self.battery_health)
+        return BatteryHealth(int(self.battery_health))
