@@ -25,7 +25,7 @@ def create_report_addon(report: DiagReport):
                 DescriptionRow(text="با کارشناسی‌آنلاین اندروید مشخصات دقیق آگهی را بدست آورید و مطمئن تر خرید کنید",
                                has_divider=True),
                 ScoreRow(title="ورژن آندروید",
-                         descriptive_score=f"{report.os_version} {get_android_name(report.os_version)}",
+                         descriptive_score=f"{report.os_version}",
                          score_color=Color.SUCCESS_PRIMARY,
                          has_divider=True,
                          icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
