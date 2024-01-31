@@ -41,3 +41,7 @@ class DiagReport(models.Model):
 
     image = models.URLField(null=True)
     submitted = models.BooleanField(default=False)
+
+    @property
+    def battery(self):
+        return BatteryHealth(self.battery_health)

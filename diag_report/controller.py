@@ -2,7 +2,7 @@ from typing import Optional
 
 from django.conf import settings
 
-from diag_report.models import DiagReport
+from diag_report.models import DiagReport, BatteryHealth
 from google_images_search import GoogleImagesSearch
 
 from kenar.clients.addons import addons_client
@@ -25,12 +25,16 @@ def create_report_addon(report: DiagReport):
                 DescriptionRow(text="با کارشناسی‌آنلاین اندروید مشخصات دقیق آگهی را بدست آورید و مطمئن تر خرید کنید",
                                has_divider=True),
                 ScoreRow(title="ورژن آندروید",
-                         descriptive_score=f"{report.os_version}",
+                         descriptive_score=f"{report.os_version}{get_android_name(report.os_version)}",
                          score_color=Color.SUCCESS_PRIMARY,
                          has_divider=True,
                          icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
-                ScoreRow(title="برند برد", descriptive_score=f"{report.device_board}", icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
-                ScoreRow(title="برند پردازنده", descriptive_score=f"{report.device_hardware}", icon=Icon(icon_name=IconName.BRAND_GOOGLE))
+                ScoreRow(title="برند برد", descriptive_score=f"{report.device_board}", icon=Icon(icon_name=IconName.SETTINGS)),
+                ScoreRow(title="برند پردازنده", descriptive_score=f"{report.device_hardware}", icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
+                ScoreRow(title="وضعیت باتری", descriptive_score=get_battery_descriptive(report.battery),
+                         score_color=get_battery_color(report.battery),icon=Icon(icon_name=IconName.BATTERY_PROFILE)),
+                ScoreRow(title="مقدار رم", descriptive_score=f"{round(float(report.total_memory) / 1e9)}", icon=Icon(icon_name=IconName.BRAND_GOOGLE)),
+                ScoreRow(title="مدل نامبر", descriptive_score=report.device_model, icon=Icon(icon_name=IconName.BRAND_GOOGLE))
             ]
         ),
         settings.API_KEY,
@@ -38,9 +42,29 @@ def create_report_addon(report: DiagReport):
     )
 
 
+def get_battery_descriptive(battery: BatteryHealth) -> str:
+    if battery.value == BatteryHealth.GOOD:
+        return "خوب"
+    if battery.value == BatteryHealth.COLD:
+        return "سرد"
+    if battery.value == BatteryHealth.DEAD:
+        return "نیاز به تعویض"
+    if battery.value == BatteryHealth.OVER_VOLTAGE:
+        return "ولتاژ بیش‌از‌حد"
+    if battery.value == BatteryHealth.OVERHEAT:
+        return "داغ‌‌شدگی"
+    return "نامشخص"
+
+def get_battery_color(battery: BatteryHealth) -> Color:
+    if battery.value == BatteryHealth.GOOD:
+        return Color.SUCCESS_PRIMARY
+    if battery.value == BatteryHealth.UNKNOWN:
+        return Color.TEXT_PRIMARY
+    return Color.ERROR_PRIMARY
+
 def get_phone_image(report: DiagReport) -> Optional[str]:
     _search_params = {
-        'q': report.device_model,
+        'q': f"phone {report.device_brand} {report.device_model}",
         'num': 1,
         'fileType': 'jpg',
         'imgSize': 'large',
