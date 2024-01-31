@@ -42,7 +42,7 @@ def submit_report(request, *args, **kwargs):
     serializer = SubmitDiagReportSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
-    report = get_object_or_404(DiagReport, ticket=serializer.ticket)
+    report = get_object_or_404(DiagReport, ticket=serializer.validated_data['ticket'])
     try:
         create_report_addon(report)
         report.submitted = True
