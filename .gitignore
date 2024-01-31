@@ -2,3 +2,4 @@
 .env
 venv
 collected-static
+__pycahce__/
