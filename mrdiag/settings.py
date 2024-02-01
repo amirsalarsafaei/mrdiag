@@ -43,6 +43,9 @@ CSRF_TRUSTED_ORIGINS = [
     'http://*'
 ]
 
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
 
 if DEBUG:
     HOST = "http://localhost:8000"

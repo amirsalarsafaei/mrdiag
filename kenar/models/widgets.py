@@ -5,6 +5,7 @@ from kenar.models.colors import Color
 from kenar.models.encoder import CustomEncoderModel
 from kenar.models.actions import Action, ActionType
 from kenar.models.icons import Icon
+from kenar.models.style import Style
 
 
 class WidgetType(Enum):
@@ -14,6 +15,7 @@ class WidgetType(Enum):
     SELECTOR_ROW = 3
     EVENT_ROW = 4
     SCORE_ROW = 5
+    WIDE_BUTTON_BAR = 6
 
 
 class Widget(CustomEncoderModel):
@@ -158,3 +160,26 @@ class ScoreRow(Widget):
         self.score_color = score_color
 
         super().__init__(WidgetType.SCORE_ROW)
+
+
+class Button(CustomEncoderModel):
+    def __init__(self,
+                 title: Optional[str] = None,
+                 action: Optional[Action] = None):
+        self.title = title
+        self.action = action
+
+    def get_encoder_value(self):
+        return self.__dict__
+
+
+class WideButtonBar(Widget):
+    __slots__ = ('style', 'button')
+
+    def __init__(self,
+                 style: Optional[Style],
+                 button: Optional[Button]):
+        self.style = style
+        self.button = button
+
+        super().__init__(WidgetType.WIDE_BUTTON_BAR)

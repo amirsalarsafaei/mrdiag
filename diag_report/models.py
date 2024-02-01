@@ -5,6 +5,11 @@ from django.db import models
 from oauth.models import OAuth
 
 
+class File(models.Model):
+    file_id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    file = models.FileField(upload_to='uploads/')
+
+
 class BatteryHealth(IntEnum):
     GOOD = 1
     OVERHEAT = 2
@@ -29,8 +34,10 @@ class DiagReport(models.Model):
     ticket = models.OneToOneField(to=SubmitTicket, to_field='ticket', on_delete=models.CASCADE)
     battery_health = models.CharField(max_length=100, choices=BatteryHealth.choices(),
                                       default=BatteryHealth.UNKNOWN.name)
-    available_memory = models.CharField(default="0", max_length=512)
-    total_memory = models.CharField(default="0", max_length=512)
+
+    available_memory = models.BigIntegerField(default=0)
+    total_memory = models.BigIntegerField(default=0)
+
     device_model = models.CharField(max_length=512, blank=True, default="")
     device_brand = models.CharField(max_length=512, blank=True, default="")
     device_board = models.CharField(max_length=512, blank=True, default="")
@@ -38,6 +45,10 @@ class DiagReport(models.Model):
     device_manufacturer = models.CharField(max_length=512, blank=True, default="")
     device_product = models.CharField(max_length=512, blank=True, default="")
     os_version = models.CharField(default="0", max_length=512)
+    total_internal_memory = models.BigIntegerField(default=0)
+    camera_test = models.ForeignKey(to=File, to_field='file_id', on_delete=models.CASCADE, related_name="report_from_camera")
+    mic_test = models.ForeignKey(to=File, to_field='file_id', on_delete=models.CASCADE, related_name="report_from_mic")
+    is_port_healthy = models.BooleanField(default=False)
 
     image = models.URLField(null=True)
     submitted = models.BooleanField(default=False)

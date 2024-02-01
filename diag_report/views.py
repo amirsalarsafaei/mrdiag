@@ -5,8 +5,11 @@ from django.db import transaction
 from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
+from rest_framework.views import APIView
+
 from kenar.clients.addons import addons_client
 from kenar.models.addon import Addon
 from kenar.models.colors import Color
@@ -17,7 +20,7 @@ from oauth import controller as oauth_controller
 from rest_framework import generics, status
 
 from .models import DiagReport
-from .serializers import DiagReportSerializer, SubmitDiagReportSerializer
+from .serializers import DiagReportSerializer, SubmitDiagReportSerializer, FileSerializer
 from .controller import get_phone_image, create_report_addon
 
 logger = logging.getLogger(__name__)
@@ -54,6 +57,7 @@ def submit_report(request, *args, **kwargs):
         raise APIException("could not create addon")
 
     return Response({"deep_link": ""}, status=status.HTTP_200_OK)
+
 
 def landing(request):
     token = request.GET.get("post_token")
@@ -103,3 +107,18 @@ def begin_diag(request):
             "ticket": ticket,
         }
     )
+
+
+class FileUploadView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    @staticmethod
+    def post(request, *args, **kwargs):
+        file_serializer = FileSerializer(data=request.data)
+        file_serializer.is_valid(raise_exception=True)
+        file_serializer.save()
+        return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+
+
+def view_report(request, report_id):
+    pass
