@@ -167,13 +167,30 @@ class Button(CustomEncoderModel):
                  title: Optional[str] = None,
                  action: Optional[Action] = None):
         self.title = title
-        self.action = action
+        self.action = {
+                "type": "LOAD_WEB_VIEW_PAGE",
+                "fallback_link": action.fallback_link,
+                "payload": {
+                    "@type": "type.googleapis.com/widgets.LoadWebViewPagePayload",
+                    "url": action.fallback_link
+                }
+        }
 
     def get_encoder_value(self):
         return self.__dict__
 
 
-class WideButtonBar(Widget):
+class WideButtonBar(CustomEncoderModel):
+    def get_encoder_value(self):
+        return {
+            "widget_type": "WIDE_BUTTON_BAR",
+            "data": {
+                "@type": "type.googleapis.com/widgets.WideButtonBarWidgetData",
+                "style": "SECONDARY",
+                "button": self.button
+            }
+        }
+
     __slots__ = ('style', 'button')
 
     def __init__(self,
@@ -181,5 +198,3 @@ class WideButtonBar(Widget):
                  button: Optional[Button]):
         self.style = style
         self.button = button
-
-        super().__init__(WidgetType.WIDE_BUTTON_BAR)
