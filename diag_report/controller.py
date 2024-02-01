@@ -128,3 +128,58 @@ def get_android_name(version):
 
     # Return the corresponding name; if not found, return "Unknown"
     return version_names.get(str(version), "Unknown")
+
+
+def get_format_by_content_type(content_type):
+    MIME_TYPE_MAPPING = {
+        'audio/mpeg': '.mp3',
+        'audio/ogg': '.ogg',
+        'audio/wav': '.wav',
+        'audio/x-wav': '.wav',
+        'audio/webm': '.webm',
+        'audio/aac': '.aac',
+        'audio/mp4': '.mp4',  # or .m4a for audio-only MP4 container
+        'audio/flac': '.flac',
+        'audio/x-flac': '.flac',
+        'audio/x-aiff': '.aiff',
+        'audio/vnd.wav': '.wav',
+        'audio/3gpp': '.3gp',
+        'audio/3gpp2': '.3g2',
+        'video/mp4': '.mp4',
+        'video/mpeg': '.mpeg',
+        'video/ogg': '.ogv',
+        'video/webm': '.webm',
+        'video/3gpp': '.3gp',
+        'video/3gpp2': '.3g2',
+        'video/x-msvideo': '.avi',
+        'video/x-ms-wmv': '.wmv',
+        'video/x-flv': '.flv',
+        'video/x-matroska': '.mkv',
+        'image/jpeg': '.jpg',
+        'image/png': '.png',
+        'image/gif': '.gif',
+        'image/webp': '.webp',
+        'image/tiff': '.tiff',
+        'image/x-icon': '.ico',
+        'image/svg+xml': '.svg',
+        'image/bmp': '.bmp',
+        'text/plain': '.txt',
+        'text/html': '.html',
+        'text/css': '.css',
+        'text/csv': '.csv',
+        'text/javascript': '.js',
+        'application/json': '.json',
+        'application/ld+json': '.jsonld',
+        'application/xml': '.xml',
+        'application/zip': '.zip',
+        'application/x-7z-compressed': '.7z',
+        'application/x-rar-compressed': '.rar',
+        'application/pdf': '.pdf',
+        'application/msword': '.doc',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+        'application/vnd.ms-excel': '.xls',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
+        'application/vnd.ms-powerpoint': '.ppt',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx',
+    }
+    return MIME_TYPE_MAPPING.get(content_type, "")

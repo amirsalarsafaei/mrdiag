@@ -22,7 +22,7 @@ urlpatterns = [
     path("begin_diag/", begin_diag, name="begin-diag"),
     path("create-report/", create_report, name="create-report"),
     path("submit-report/", submit_report, name="submit-report"),
-    path('upload/', FileUploadView.as_view(), name='file-upload-api'),
+    path('upload/', upload_file, name='file-upload-api'),
     path('view-report/<int:report_id>/', submit_report, name='view-report'),
 ]
 

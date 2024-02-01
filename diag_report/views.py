@@ -1,7 +1,10 @@
 import logging
 
+from django.core.files.base import ContentFile
 from django.db import transaction
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404 as get_object_or_404_django
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -14,9 +17,9 @@ from oauth import controller as oauth_controller
 
 from rest_framework import generics, status
 
-from .models import DiagReport
+from .models import DiagReport, File
 from .serializers import DiagReportSerializer, SubmitDiagReportSerializer, FileSerializer
-from .controller import get_phone_image, create_report_addon
+from .controller import get_phone_image, create_report_addon, get_format_by_content_type
 
 logger = logging.getLogger(__name__)
 
@@ -105,15 +108,16 @@ def begin_diag(request):
     )
 
 
-class FileUploadView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-
-    @staticmethod
-    def post(request, *args, **kwargs):
-        file_serializer = FileSerializer(data=request.data)
-        file_serializer.is_valid(raise_exception=True)
-        file_serializer.save()
-        return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+@csrf_exempt
+@transaction.atomic
+def upload_file(request, *args, **kwargs):
+    content_file = ContentFile(request.body)
+    file = File()
+    file.save()
+    file.file.save(str(file.file_id) + get_format_by_content_type(request.content_type), content_file)
+    file.save()
+    return JsonResponse({"id": str(file.file_id)},
+                        status=status.HTTP_201_CREATED)
 
 
 def view_report(request, report_id):
