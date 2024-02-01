@@ -1,4 +1,8 @@
+import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.datetime_safe import datetime as django_datetime
+from persiantools.jdatetime import JalaliDateTime
 from rest_framework import serializers
 from .models import DiagReport, BatteryHealth, SubmitTicket, File
 
@@ -9,6 +13,8 @@ class DiagReportSerializer(serializers.ModelSerializer):
     mic_test_id = serializers.UUIDField(write_only=True)
     camera_test_file_url = serializers.SerializerMethodField()
     mic_test_file_url = serializers.SerializerMethodField()
+
+    report_date = serializers.SerializerMethodField()
 
     class Meta:
         model = DiagReport
@@ -25,10 +31,11 @@ class DiagReportSerializer(serializers.ModelSerializer):
             'image',
             'ticket',
             'device_hardware',
-            'camera_test_id', 'mic_test_id', 'camera_test_file_url', 'mic_test_file_url'
+            'camera_test_id', 'mic_test_id', 'camera_test_file_url', 'mic_test_file_url',
+            'is_port_healthy', 'total_internal_memory', 'report_date'
         ]
 
-        read_only_fields = ('image',)
+        read_only_fields = ('image', 'report_date')
 
     def get_camera_test_file_url(self, obj):
         request = self.context.get('request')
@@ -36,11 +43,19 @@ class DiagReportSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.camera_test.file.url)
         return None
 
+    def get_report_date(self, obj):
+        request = self.context.get('request')
+        return self.get_jalali_str_from_datetime(obj.created_at)
+
     def get_mic_test_file_url(self, obj):
         request = self.context.get('request')
         if obj.mic_test.file and hasattr(obj.mic_test.file, 'url'):
             return request.build_absolute_uri(obj.mic_test.file.url)
         return None
+
+    @classmethod
+    def get_jalali_str_from_datetime(cls, date: django_datetime):
+        return JalaliDateTime(datetime.datetime(date.year, date.month, date.day)).strftime(fmt="%Y/%m/%d", locale="fa")
 
     def to_representation(self, instance):
         data = super(DiagReportSerializer, self).to_representation(instance)

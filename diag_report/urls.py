@@ -23,7 +23,7 @@ urlpatterns = [
     path("create-report/", create_report, name="create-report"),
     path("submit-report/", submit_report, name="submit-report"),
     path('upload/', upload_file, name='file-upload-api'),
-    path('view-report/<int:report_id>/', submit_report, name='view-report'),
+    path('view-report/<int:report_id>/', view_report, name='view-report'),
 ]
 
 app_name = 'diag_report'

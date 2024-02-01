@@ -2,6 +2,8 @@ import uuid
 from enum import IntEnum
 
 from django.db import models
+from django.utils.datetime_safe import datetime
+
 from oauth.models import OAuth
 
 
@@ -33,7 +35,7 @@ class SubmitTicket(models.Model):
 class DiagReport(models.Model):
     ticket = models.OneToOneField(to=SubmitTicket, to_field='ticket', on_delete=models.CASCADE)
     battery_health = models.CharField(max_length=100, choices=BatteryHealth.choices(),
-                                      default=BatteryHealth.UNKNOWN.name)
+                                      default=str(BatteryHealth.UNKNOWN.value))
 
     available_memory = models.BigIntegerField(default=0)
     total_memory = models.BigIntegerField(default=0)
@@ -53,6 +55,13 @@ class DiagReport(models.Model):
     image = models.URLField(null=True)
     submitted = models.BooleanField(default=False)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+
     @property
     def battery(self):
         return BatteryHealth(int(self.battery_health))
+
+
+def format_bit(bits):
+    if bits < 2**3:
+        return ""

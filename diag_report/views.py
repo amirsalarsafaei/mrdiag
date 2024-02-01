@@ -27,14 +27,14 @@ logger = logging.getLogger(__name__)
 @api_view(['POST'])
 @transaction.atomic
 def create_report(request, *args, **kwargs):
-    serializer = DiagReportSerializer(data=request.data)
+    serializer = DiagReportSerializer(data=request.data, context={'request': request})
     serializer.is_valid(raise_exception=True)
     report: DiagReport = serializer.save()
     report.image = get_phone_image(report)
     report.ticket.used = True
     report.save()
 
-    serializer = DiagReportSerializer(report)
+    serializer = DiagReportSerializer(report, context={'request': request})
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -122,10 +122,11 @@ def upload_file(request, *args, **kwargs):
 
 def view_report(request, report_id):
     report = get_object_or_404_django(DiagReport, id=report_id)
+    serializer = DiagReportSerializer(report, context={'request': request})
     return render(
         request,
         'diag_report/view_report.html',
         {
-            "report": report,
+            "report": serializer.data,
         }
     )
