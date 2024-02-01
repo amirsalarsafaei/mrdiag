@@ -22,7 +22,7 @@ def create_report_addon(report: DiagReport):
         post_token,
         Addon(
             widgets=[
-                LegendTitleRow(title="اقای‌اندروید", subtitle="کارشناسی‌آنلاین", has_divider=True),
+                LegendTitleRow(title="اقای‌دیاگ", subtitle="کارشناسی‌آنلاین", has_divider=True),
                 ScoreRow(title="ورژن اندروید",
                          descriptive_score=f"{report.os_version}{get_android_name(report.os_version)}",
                          score_color=Color.SUCCESS_PRIMARY,
