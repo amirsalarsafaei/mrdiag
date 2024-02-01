@@ -62,6 +62,11 @@ class DiagReport(models.Model):
         return BatteryHealth(int(self.battery_health))
 
 
-def format_bit(bits):
-    if bits < 2**3:
-        return ""
+def format_bytes(bytes: int):
+    if bytes < 2**10:
+        return f"{bytes} Bytes"
+    if bytes < 2**20:
+        return f"{bytes // 1024} KB"
+    if bytes < 2**30:
+        return f"{bytes // (2**20)} MB"
+    return f"{bytes // (2**30)} GB"

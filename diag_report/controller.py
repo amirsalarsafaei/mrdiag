@@ -3,7 +3,7 @@ from typing import Optional
 from django.conf import settings
 from django.urls import reverse
 
-from diag_report.models import DiagReport, BatteryHealth
+from diag_report.models import DiagReport, BatteryHealth, format_bytes
 from google_images_search import GoogleImagesSearch
 
 from kenar.clients.addons import addons_client
@@ -23,22 +23,20 @@ def create_report_addon(report: DiagReport):
         Addon(
             widgets=[
                 LegendTitleRow(title="اقای‌اندروید", subtitle="کارشناسی‌آنلاین", has_divider=True),
-                DescriptionRow(text="با کارشناسی‌آنلاین اندروید مشخصات دقیق آگهی را بدست آورید و مطمئن تر خرید کنید",
-                               has_divider=True),
                 ScoreRow(title="ورژن اندروید",
                          descriptive_score=f"{report.os_version}{get_android_name(report.os_version)}",
                          score_color=Color.SUCCESS_PRIMARY,
                          has_divider=True,
                          icon=Icon(icon_name=IconName.SETTINGS)),
-                ScoreRow(title="برند برد", descriptive_score=f"{report.device_board}",
-                         icon=Icon(icon_name=IconName.SETTINGS)),
                 ScoreRow(title="برند پردازنده", descriptive_score=f"{report.device_hardware}",
                          icon=Icon(icon_name=IconName.SETTINGS)),
                 ScoreRow(title="وضعیت باتری", descriptive_score=get_battery_descriptive(report.battery),
                          score_color=get_battery_color(report.battery), icon=Icon(icon_name=IconName.SETTINGS)),
-                ScoreRow(title="مقدار رم", descriptive_score=f"{round(float(report.total_memory) / 1e9)}",
+                ScoreRow(title="مقدار رم", descriptive_score=f"{format_bytes(report.total_memory)}",
                          icon=Icon(icon_name=IconName.SETTINGS)),
-                ScoreRow(title="مدل نامبر", descriptive_score=report.device_model,
+                ScoreRow(title="مقدار حافظه", descriptive_score=f"{format_bytes(report.total_internal_memory)}",
+                         icon=Icon(icon_name=IconName.SETTINGS)),
+                ScoreRow(title="وضعیت پورت شارژ", descriptive_score=get_charge_port_descriptive(report.is_port_healthy),
                          icon=Icon(icon_name=IconName.SETTINGS)),
                 WideButtonBar(
                     button=Button(
@@ -183,3 +181,9 @@ def get_format_by_content_type(content_type):
         'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx',
     }
     return MIME_TYPE_MAPPING.get(content_type, "")
+
+
+def get_charge_port_descriptive(is_charge_port_healthy):
+    if is_charge_port_healthy:
+        return "سالم"
+    return "خراب"
