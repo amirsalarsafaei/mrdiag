@@ -1,8 +1,7 @@
 import logging
 
-from django.conf import settings
 from django.db import transaction
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404 as get_object_or_404_django
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -10,10 +9,6 @@ from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 from rest_framework.views import APIView
 
-from kenar.clients.addons import addons_client
-from kenar.models.addon import Addon
-from kenar.models.colors import Color
-from kenar.models.widgets import LegendTitleRow, ScoreRow
 from kenar.utils.errors import DivarException
 from oauth import controller as oauth_controller
 
@@ -56,7 +51,8 @@ def submit_report(request, *args, **kwargs):
         logger.error("could not create addon", type(e))
         raise APIException("could not create addon")
 
-    return Response({"deep_link": ""}, status=status.HTTP_200_OK)
+    return Response({"deep_link": f"https://divar.ir/v/{report.ticket.oauth.approved_addon_token()}"},
+                    status=status.HTTP_200_OK)
 
 
 def landing(request):
@@ -121,4 +117,11 @@ class FileUploadView(APIView):
 
 
 def view_report(request, report_id):
-    pass
+    report = get_object_or_404_django(DiagReport, id=report_id)
+    return render(
+        request,
+        'diag_report/view_report.html',
+        {
+            "report": report,
+        }
+    )
