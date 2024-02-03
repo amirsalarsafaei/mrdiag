@@ -51,7 +51,7 @@ class DiagReportSerializer(serializers.ModelSerializer):
     def get_mic_test_file_url(self, obj):
         request = self.context.get('request')
         if obj.mic_test.file:
-            return settings.HOST + f"/media/uploads/{obj.mic_test.file.name}"
+            return settings.HOST + f"/media/{obj.mic_test.file.name}"
         return None
 
     @classmethod
