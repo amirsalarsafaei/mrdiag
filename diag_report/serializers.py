@@ -1,5 +1,6 @@
 import datetime
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datetime_safe import datetime as django_datetime
 from persiantools.jdatetime import JalaliDateTime
@@ -49,8 +50,8 @@ class DiagReportSerializer(serializers.ModelSerializer):
 
     def get_mic_test_file_url(self, obj):
         request = self.context.get('request')
-        if obj.mic_test.file and hasattr(obj.mic_test.file, 'url'):
-            return request.build_absolute_uri(obj.mic_test.file.url)
+        if obj.mic_test.file:
+            return settings.HOST + f"/media/uploads/{obj.mic_test.file.name}"
         return None
 
     @classmethod
