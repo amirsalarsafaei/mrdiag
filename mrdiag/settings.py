@@ -52,7 +52,7 @@ if DEBUG:
     HOST = "http://localhost:8000"
 else:
     HOST = "https://team4.hackathon.divar.codes"
-
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 OAUTH_INFO_SESSION_KEY = "oauth"
 # Application definition
