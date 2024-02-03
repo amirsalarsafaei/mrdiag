@@ -47,7 +47,7 @@ CSRF_TRUSTED_ORIGINS = [
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 100*1024*1024
 if DEBUG:
     HOST = "http://localhost:8000"
 else:
