@@ -111,10 +111,8 @@ def begin_diag(request):
 @csrf_exempt
 @transaction.atomic
 def upload_file(request, *args, **kwargs):
-    content_file = ContentFile(request.body)
-    file = File()
-    file.save()
-    file.file.save(str(file.file_id) + get_format_by_content_type(request.content_type), content_file)
+    file = File.objects.create()
+    file.file = request.FILES['file']
     file.save()
     return JsonResponse({"id": str(file.file_id)},
                         status=status.HTTP_201_CREATED)

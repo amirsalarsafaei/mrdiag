@@ -1,3 +1,4 @@
+import os
 import uuid
 from enum import IntEnum
 
@@ -7,9 +8,15 @@ from django.utils.datetime_safe import datetime
 from oauth.models import OAuth
 
 
+def upload_to(instance, filename):
+    extension = os.path.splitext(filename)[1]
+    # Use instance.file_id as the filename
+    return 'uploads/{0}{1}'.format(instance.file_id, extension)
+
+
 class File(models.Model):
     file_id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    file = models.FileField(upload_to='uploads/')
+    file = models.FileField(upload_to=upload_to)
 
 
 class BatteryHealth(IntEnum):
@@ -48,7 +55,8 @@ class DiagReport(models.Model):
     device_product = models.CharField(max_length=512, blank=True, default="")
     os_version = models.CharField(default="0", max_length=512)
     total_internal_memory = models.BigIntegerField(default=0)
-    camera_test = models.ForeignKey(to=File, to_field='file_id', on_delete=models.CASCADE, related_name="report_from_camera")
+    camera_test = models.ForeignKey(to=File, to_field='file_id', on_delete=models.CASCADE,
+                                    related_name="report_from_camera")
     mic_test = models.ForeignKey(to=File, to_field='file_id', on_delete=models.CASCADE, related_name="report_from_mic")
     is_port_healthy = models.BooleanField(default=False)
 
@@ -63,10 +71,10 @@ class DiagReport(models.Model):
 
 
 def format_bytes(bytes: int):
-    if bytes < 2**10:
+    if bytes < 2 ** 10:
         return f"{bytes} Bytes"
-    if bytes < 2**20:
+    if bytes < 2 ** 20:
         return f"{bytes // 1024} KB"
-    if bytes < 2**30:
-        return f"{bytes // (2**20)} MB"
-    return f"{bytes // (2**30)} GB"
+    if bytes < 2 ** 30:
+        return f"{bytes // (2 ** 20)} MB"
+    return f"{bytes // (2 ** 30)} GB"
